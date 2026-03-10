@@ -54,6 +54,7 @@ class SessionListCell extends ListCell<SessionViewModel> {
             String colorHex = CategoryColorUtil.colorFor(item.categoryName());
             Circle dot = new Circle(5, Color.web(colorHex));
             Text text = new Text(item.asDisplayString());
+            text.getStyleClass().add("list-cell-text");
             HBox box = new HBox(8, dot, text);
             setGraphic(box);
             setText(null);

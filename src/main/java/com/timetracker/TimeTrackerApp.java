@@ -50,7 +50,9 @@ public class TimeTrackerApp extends Application {
         Parent root = loader.load();
         MainController controller = loader.getController();
         primaryStage.setTitle("TimeTracker+");
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/com/timetracker/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
         primaryStage.show();

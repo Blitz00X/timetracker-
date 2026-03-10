@@ -9,36 +9,31 @@
 <HBox xmlns="http://javafx.com/javafx/21.0.2"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.timetracker.controller.MainController"
-      spacing="16.0"
-      style="-fx-background-color: #F3F3F3; -fx-padding: 16;">
+      spacing="24.0"
+      styleClass="app-root">
 
     <!-- Left Panel: Categories -->
-    <VBox spacing="12" prefWidth="200" maxWidth="220" minWidth="180"
-          style="-fx-background-color: #FFFFFF; -fx-border-color: #D8D8D8; -fx-border-width: 1; -fx-padding: 16;">
-        <Label text="Categories" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+    <VBox spacing="12" prefWidth="200" maxWidth="220" minWidth="180" styleClass="card">
+        <Label text="Categories" styleClass="section-title"/>
         <ListView fx:id="categoryListView" prefHeight="420"/>
         <HBox spacing="8">
             <Button fx:id="addCategoryButton" text="Add Category" onAction="#onAddCategory" />
             <Button text="Edit" onAction="#onEditCategory" />
         </HBox>
         <Button text="Delete Category" onAction="#onDeleteCategory"/>
-        <Label text="Tip: right-click a category for more actions" wrapText="true"
-               style="-fx-text-fill: #555; -fx-font-size: 11px;"/>
+        <Label text="Tip: right-click a category for more actions" wrapText="true" styleClass="muted-text small-text"/>
     </VBox>
 
     <!-- Center Panel: Timer + Today -->
-    <VBox spacing="24" alignment="TOP_CENTER" HBox.hgrow="ALWAYS"
-          style="-fx-background-color: #FFFFFF; -fx-border-color: #D8D8D8; -fx-border-width: 1; -fx-padding: 24;">
+    <VBox spacing="24" alignment="TOP_CENTER" HBox.hgrow="ALWAYS" styleClass="card">
 
         <!-- Timer Block -->
         <VBox spacing="12" alignment="CENTER">
-            <Label fx:id="timerLabel" text="00:00:00"
-                   style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #222;"/>
-            <Label fx:id="selectedCategoryLabel" text="Selected Category: -"
-                   style="-fx-font-size: 20px; -fx-text-fill: #222;"/>
-            <Label fx:id="remainingTimeLabel" text="Remaining Today: -" style="-fx-font-size: 14px; -fx-text-fill: #555;"/>
-            <Label fx:id="startTimeLabel" text="Start Time: -" style="-fx-font-size: 14px; -fx-text-fill: #555;"/>
-            <Label fx:id="statusLabel" text="Status: Idle" style="-fx-font-size: 14px; -fx-text-fill: #555;"/>
+            <Label fx:id="timerLabel" text="00:00:00" styleClass="timer-label"/>
+            <Label fx:id="selectedCategoryLabel" text="Selected Category: -" styleClass="headline-label"/>
+            <Label fx:id="remainingTimeLabel" text="Remaining Today: -" styleClass="muted-text"/>
+            <Label fx:id="startTimeLabel" text="Start Time: -" styleClass="muted-text"/>
+            <Label fx:id="statusLabel" text="Status: Idle" styleClass="muted-text"/>
             <HBox spacing="10" alignment="CENTER">
                 <Button fx:id="startStopButton" text="Start" onAction="#onStartStop" prefWidth="110"/>
                 <Button fx:id="resetButton" text="Reset" onAction="#onReset" disable="true" prefWidth="110"/>
@@ -53,35 +48,30 @@
                 </ComboBox>
             </HBox>
         </VBox>
-
-        <!-- Timeline -->
-        <VBox spacing="8" alignment="CENTER_LEFT" maxWidth="Infinity" prefWidth="600">
-            <Label text="Today’s Breakdown" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222;"/>
-            <StackPane prefHeight="80" style="-fx-background-color: #F3F3F3; -fx-border-color: #D8D8D8; -fx-border-width: 1;">
-                <ListView fx:id="timelineListView" style="-fx-background-color: transparent;" />
-            </StackPane>
-            <HBox spacing="10">
-                <Button text="Export Day (.ics)" onAction="#onExportTodayIcs"/>
-                <Button text="Export Day (.csv)" onAction="#onExportTodayCsv"/>
-            </HBox>
-        </VBox>
-
-        <!-- Today Summary (manual) -->
-        <VBox spacing="8" alignment="CENTER_LEFT" maxWidth="Infinity" prefWidth="600">
-            <Label text="Today Summary" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #222;"/>
-            <ListView prefHeight="140" />
-        </VBox>
     </VBox>
 
     <!-- Right Panel: Auto Usage Inspector -->
-    <VBox spacing="12" prefWidth="360" minWidth="320" maxWidth="Infinity"
-          style="-fx-background-color: #FFFFFF; -fx-border-color: #D8D8D8; -fx-border-width: 1; -fx-padding: 16;">
-        <TabPane prefWidth="340">
+    <VBox spacing="12" prefWidth="360" minWidth="320" maxWidth="Infinity" styleClass="card">
+        <TabPane prefWidth="340" styleClass="pill-tabs">
             <tabs>
                 <Tab text="Today" closable="false">
                     <content>
                         <VBox spacing="10">
-                            <Label text="Today view located in center panel." style="-fx-text-fill: #555;"/>
+                            <Label text="Today’s Breakdown" styleClass="section-title"/>
+                            <StackPane prefHeight="120">
+                                <ListView fx:id="timelineListView" />
+                            </StackPane>
+                            <HBox spacing="10">
+                                <Button text="Export Day (.ics)" onAction="#onExportTodayIcs"/>
+                                <Button text="Export Day (.csv)" onAction="#onExportTodayCsv"/>
+                            </HBox>
+                            <Label text="Today’s Summary" styleClass="subsection-title"/>
+                            <TableView fx:id="todaySummaryTable" prefHeight="140">
+                                <columns>
+                                    <TableColumn fx:id="todaySummaryCategoryColumn" text="Category" prefWidth="180"/>
+                                    <TableColumn fx:id="todaySummaryDurationColumn" text="Minutes" prefWidth="100"/>
+                                </columns>
+                            </TableView>
                         </VBox>
                     </content>
                 </Tab>
@@ -89,9 +79,9 @@
                     <content>
                         <VBox spacing="10">
                             <HBox spacing="10" alignment="CENTER_LEFT">
-                                <Label text="Auto tracking" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+                                <Label text="Auto tracking" styleClass="section-title"/>
                                 <DatePicker fx:id="autoDatePicker"/>
-                                <CheckBox fx:id="trackingPauseToggle" text="Pause" onAction="#onToggleTracking"/>
+                                <ToggleButton fx:id="trackingPauseToggle" text="Disable Auto Tracking" onAction="#onToggleTracking"/>
                                 <Button text="Refresh" onAction="#onRefreshAuto"/>
                                 <Button fx:id="autoExportButton" text="Export (.csv)" onAction="#onExportAutoCsv"/>
                             </HBox>
@@ -108,7 +98,7 @@
                 <Tab text="History" closable="false">
                     <content>
                         <VBox spacing="10">
-                            <Label text="History" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+                            <Label text="History" styleClass="section-title"/>
                             <HBox spacing="10" alignment="CENTER_LEFT">
                                 <VBox spacing="5">
                                     <Label text="From" />
@@ -122,7 +112,7 @@
                             </HBox>
                             <Label fx:id="rangeErrorLabel" textFill="#cc0000"/>
                             <ListView fx:id="historyListView" prefHeight="140"/>
-                            <Label text="Category Summary" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+                            <Label text="Category Summary" styleClass="subsection-title"/>
                             <TableView fx:id="summaryTable" prefHeight="120">
                                 <columns>
                                     <TableColumn fx:id="summaryCategoryColumn" text="Category" prefWidth="180"/>

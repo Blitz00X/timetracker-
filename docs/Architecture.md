@@ -24,7 +24,7 @@ ActivityTrackingService → ActivityEventDao
 ```
 
 ## Modules
-- **UI (`controller`, `view`)**: `MainController` wires FXML controls to services; `CategoryListCell`/`SessionListCell` provide context menus; `CompactWindow` exposes minimal controls when the main window is minimized.
+- **UI (`controller`, `view`)**: `MainController` wires FXML controls to services; `CategoryListCell`/`SessionListCell` provide context menus; `CompactWindow` exposes minimal controls when the main window is minimized. The Today tab in the right pane hosts the manual timeline, day exports, and per-category summary.
 - **Services (`service`)**: `CategoryService` and `SessionService` implement validation, limit enforcement, exports, and view-model mapping.
 - **Persistence (`dao`, `db`)**: Shared `DatabaseManager` supplies SQLite connections. DAOs handle SQL and schema assumptions. `DatabaseInitializer` creates tables and applies additive migrations at startup.
 - **Auto tracking (`tracking`)**: Captures foreground app/URL (`ActiveAppCollector`, platform-specific implementations) and idle state (`IdleDetectionService`), persists raw events (`ActivityEventDao`), aggregates to sessions/totals (`ActivityAggregationJob`, `ActivityAggregator`, `ActivitySessionDao`), and exposes reports (`ActivityReportingService`).

@@ -1,0 +1,230 @@
+@font-face {
+    font-family: "Inter";
+    src: url("fonts/Inter-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 600;
+    src: url("fonts/Inter-SemiBold.ttf");
+}
+
+.root {
+    -color-bg: #1E1E1E;
+    -color-card: #2A2A2A;
+    -color-border: #3A3A3A;
+    -color-text: #EEEEEE;
+    -color-text-muted: #B5B5B5;
+    -color-accent: #3B82F6;
+    -color-accent-strong: #60A5FA;
+    -radius: 8px;
+    -fx-background-color: -color-bg;
+    -fx-text-fill: -color-text;
+    -fx-font-family: "Inter", "Segoe UI", "Sans-Serif";
+}
+
+.app-root {
+    -fx-padding: 24px;
+    -fx-spacing: 24px;
+}
+
+.card {
+    -fx-background-color: -color-card;
+    -fx-background-radius: -radius;
+    -fx-padding: 24px;
+    -fx-spacing: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 18, 0.25, 0, 4);
+    -fx-border-color: -color-border;
+    -fx-border-radius: -radius;
+}
+
+.section-title {
+    -fx-text-fill: -color-text;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+}
+
+.subsection-title {
+    -fx-text-fill: -color-text;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+
+.headline-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: -color-text;
+    -fx-font-weight: 600;
+}
+
+.timer-label {
+    -fx-font-size: 48px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -color-text;
+}
+
+.muted-text {
+    -fx-text-fill: -color-text-muted;
+    -fx-font-size: 13px;
+}
+
+.small-text {
+    -fx-font-size: 11px;
+}
+
+.button {
+    -fx-background-radius: -radius;
+    -fx-padding: 10px 14px;
+    -fx-font-weight: 600;
+    -fx-background-color: -color-accent;
+    -fx-text-fill: -color-text;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: -color-accent-strong;
+}
+
+.button:pressed {
+    -fx-background-color: derive(-color-accent, -10%);
+}
+
+.button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+.combo-box, .date-picker, .list-view, .table-view, .text-field {
+    -fx-background-color: -color-card;
+    -fx-text-fill: -color-text;
+    -fx-control-inner-background: -color-card;
+    -fx-border-color: -color-border;
+    -fx-border-radius: -radius;
+    -fx-background-radius: -radius;
+}
+
+.list-view {
+    -fx-background-color: derive(-color-card, 8%);
+    -fx-control-inner-background: derive(-color-card, 8%);
+    -fx-border-color: -color-border;
+    -fx-border-radius: -radius;
+    -fx-background-radius: -radius;
+    -fx-text-fill: -color-text;
+}
+
+.list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-text;
+    -fx-padding: 8px 10px;
+    -fx-text-background-color: -color-text;
+    -fx-opacity: 1.0;
+}
+
+.list-view .list-cell:filled,
+.list-view .list-cell:filled:selected,
+.list-view .list-cell:filled:selected:hover {
+    -fx-text-fill: -color-text;
+    -fx-text-background-color: -color-text;
+}
+
+.list-view .list-cell:filled:selected, .list-view .list-cell:filled:selected:hover {
+    -fx-background-color: rgba(59,130,246,0.3);
+}
+
+.list-view .list-cell .text,
+.list-cell-text,
+.list-view .text {
+    -fx-fill: -color-text;
+}
+
+.tab-pane.pill-tabs > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: -color-border;
+    -fx-background-radius: 14px;
+    -fx-background-insets: 0;
+    -fx-text-base-color: -color-text;
+}
+
+.tab-pane.pill-tabs > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: -color-accent;
+    -fx-text-base-color: -color-bg;
+}
+
+.tab-pane.pill-tabs > .tab-header-area > .headers-region > .tab:hover:not(.selected) {
+    -fx-background-color: derive(-color-border, 15%);
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-label {
+    -fx-text-fill: -color-text;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: -color-bg;
+}
+
+.table-view {
+    -fx-border-color: -color-border;
+    -fx-background-radius: -radius;
+    -fx-border-radius: -radius;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -color-card;
+    -fx-border-color: -color-border;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: -color-card;
+    -fx-text-fill: -color-text;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 6px 10px;
+}
+
+.table-view .table-row-cell:filled:selected, .table-view .table-row-cell:filled:selected:hover {
+    -fx-background-color: rgba(59,130,246,0.25);
+}
+
+.table-view .table-row-cell .text, .table-view .table-row-cell:filled:selected .text {
+    -fx-fill: -color-text;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: -color-text;
+}
+
+.split-pane, .tab-pane, .scroll-pane, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb {
+    -fx-background-color: -color-border;
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar:vertical .track, .scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+}
+
+.label {
+    -fx-text-fill: -color-text;
+}
+
+.combo-box, .date-picker {
+    -fx-text-fill: -color-text;
+}
+
+.combo-box .list-cell, .combo-box-popup .list-view .list-cell {
+    -fx-text-fill: -color-text;
+    -fx-text-background-color: -color-text;
+}
+
+#rangeErrorLabel {
+    -fx-text-fill: #F97316;
+    -fx-font-size: 12px;
+}

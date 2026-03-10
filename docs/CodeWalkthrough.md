@@ -4,8 +4,9 @@
 - `TimeTrackerApp` (extends `Application`) initializes the database, loads `main-view.fxml`, and binds the `MainController`. It starts background services (tracking, idle detection) and schedules aggregation every 5 minutes; on exit it shuts them down and runs a final aggregation.
 
 ## UI Layer
-- **FXML**: `src/main/resources/com/timetracker/view/main-view.fxml` defines three panels (categories, central timer/today, right-side tabs including Auto Usage and History).
-- **MainController**: Wires all UI controls, orchestrates service calls, binds enable/disable states, and handles alerts/dialogs.
+- **FXML**: `src/main/resources/com/timetracker/view/main-view.fxml` defines three panels (categories, central timer, right-side tabs for Today/Auto Usage/History; Today tab hosts the breakdown + day exports + per-category summary) without inline styles.
+- **Stylesheet**: `src/main/resources/com/timetracker/view/styles.css` applies the dark card-based theme, Inter font, and component look (buttons, pills, tables, lists).
+- **MainController**: Wires all UI controls, orchestrates service calls, binds enable/disable states, and handles alerts/dialogs. Auto Usage tab now includes an enable/disable toggle that pauses background tracking and disables the table/export when off.
 - **Custom cells**: `CategoryListCell` adds context menu actions (set limit, adjust remaining today, reset usage, delete) with color dots; `SessionListCell` supports edit/delete via context menu or Delete key.
 - **CompactWindow**: Auxiliary always-on-top window that uses `MainController` APIs (`toggleSessionFromCompact`, `selectCategory`, `getActiveSession`) to mirror state when the main window is minimized.
 

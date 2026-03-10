@@ -32,6 +32,7 @@ import javafx.scene.control.Tooltip;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import javafx.scene.control.ToggleButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,6 +80,15 @@ public class MainController {
     private TableColumn<CategorySummaryViewModel, Number> summaryDurationColumn;
 
     @FXML
+    private TableView<CategorySummaryViewModel> todaySummaryTable;
+
+    @FXML
+    private TableColumn<CategorySummaryViewModel, String> todaySummaryCategoryColumn;
+
+    @FXML
+    private TableColumn<CategorySummaryViewModel, Number> todaySummaryDurationColumn;
+
+    @FXML
     private TableView<ActivityTotalViewModel> autoTotalsTable;
 
     @FXML
@@ -91,7 +101,7 @@ public class MainController {
     private TableColumn<ActivityTotalViewModel, String> autoDurationColumn;
 
     @FXML
-    private CheckBox trackingPauseToggle;
+    private ToggleButton trackingPauseToggle;
 
     @FXML
     private Button autoExportButton;
@@ -144,6 +154,7 @@ public class MainController {
     private final ObservableList<SessionViewModel> timelineItems = FXCollections.observableArrayList();
     private final ObservableList<SessionViewModel> historyItems = FXCollections.observableArrayList();
     private final ObservableList<CategorySummaryViewModel> summaryItems = FXCollections.observableArrayList();
+    private final ObservableList<CategorySummaryViewModel> todaySummaryItems = FXCollections.observableArrayList();
     private final ObservableList<ActivityTotalViewModel> autoTotals = FXCollections.observableArrayList();
 
     private Timeline tickingTimeline;
@@ -171,6 +182,17 @@ public class MainController {
         summaryCategoryColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().categoryName()));
         summaryDurationColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().totalMinutes()));
 
+        if (todaySummaryTable != null) {
+            todaySummaryTable.setItems(todaySummaryItems);
+            todaySummaryTable.setPlaceholder(new Label("No activity yet today"));
+            if (todaySummaryCategoryColumn != null) {
+                todaySummaryCategoryColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().categoryName()));
+            }
+            if (todaySummaryDurationColumn != null) {
+                todaySummaryDurationColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().totalMinutes()));
+            }
+        }
+
         if (autoTotalsTable != null) {
             autoTotalsTable.setItems(autoTotals);
             autoTotalsTable.setPlaceholder(new Label("No auto activity"));
@@ -187,9 +209,6 @@ public class MainController {
             }
             if (autoDurationColumn != null) {
                 autoDurationColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().formattedDuration()));
-            }
-            if (autoExportButton != null) {
-                autoExportButton.disableProperty().bind(Bindings.isEmpty(autoTotals));
             }
         }
 
@@ -214,8 +233,10 @@ public class MainController {
         loadCategories();
         refreshTimeline();
         refreshHistoryRange();
+        refreshTodaySummary();
         refreshAutoUsage();
         updateTrackingToggle();
+        updateAutoControls();
     }
 
     @FXML
@@ -403,6 +424,17 @@ public class MainController {
         timelineItems.setAll(sessionService.getTodaySessions());
         updateSelectedCategoryLabel(categoryListView.getSelectionModel().getSelectedItem());
         updateControlAvailability();
+        refreshTodaySummary();
+    }
+
+    private void refreshTodaySummary() {
+        if (todaySummaryTable == null) {
+            return;
+        }
+        LocalDate today = LocalDate.now();
+        todaySummaryItems.setAll(sessionService.getCategorySummaryForDateRange(today, today).entrySet().stream()
+                .map(entry -> new CategorySummaryViewModel(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList()));
     }
 
     private void refreshHistoryRange() {
@@ -945,8 +977,11 @@ public class MainController {
         if (trackingService == null || trackingPauseToggle == null) {
             return;
         }
-        boolean pause = trackingPauseToggle.isSelected();
-        trackingService.setPaused(pause);
+        boolean enable = trackingPauseToggle.isSelected();
+        trackingService.setPaused(!enable);
+        updateTrackingToggle();
+        updateAutoControls();
+        refreshAutoUsage();
     }
 
     @FXML
@@ -997,6 +1032,11 @@ public class MainController {
         if (aggregationJob == null || reportingService == null) {
             return;
         }
+        if (trackingService != null && trackingService.isPaused()) {
+            autoTotals.clear();
+            updateAutoControls();
+            return;
+        }
         try {
             LocalDate date = autoDatePicker != null && autoDatePicker.getValue() != null
                     ? autoDatePicker.getValue()
@@ -1006,8 +1046,10 @@ public class MainController {
             aggregationJob.aggregate(startOfDay, endOfDay, true);
             List<ActivityDailyTotal> totals = reportingService.getTotalsForDate(date);
             autoTotals.setAll(toAutoViewModels(totals));
+            updateAutoControls();
         } catch (Exception e) {
             autoTotals.clear();
+            updateAutoControls();
         }
     }
 
@@ -1043,11 +1085,32 @@ public class MainController {
         if (trackingPauseToggle == null || trackingService == null) {
             return;
         }
-        trackingPauseToggle.setSelected(trackingService.isPaused());
+        boolean paused = trackingService.isPaused();
+        trackingPauseToggle.setSelected(!paused);
+        trackingPauseToggle.setText(paused ? "Enable Auto Tracking" : "Disable Auto Tracking");
         if (trackingConfig != null) {
             trackingPauseToggle.setTooltip(new Tooltip(
                     "Background polling: " + trackingConfig.pollingInterval().toSeconds() + "s, " +
                             "idle threshold: " + trackingConfig.idleThreshold().toMinutes() + "m"));
+        }
+    }
+
+    private void updateAutoControls() {
+        boolean paused = trackingService != null && trackingService.isPaused();
+        boolean disableActions = paused;
+        if (autoDatePicker != null) {
+            autoDatePicker.setDisable(disableActions);
+        }
+        if (autoExportButton != null) {
+            autoExportButton.setDisable(disableActions || autoTotals.isEmpty());
+        }
+        if (autoTotalsTable != null) {
+            autoTotalsTable.setDisable(disableActions);
+            if (paused) {
+                autoTotalsTable.setPlaceholder(new Label("Auto tracking disabled"));
+            } else {
+                autoTotalsTable.setPlaceholder(new Label("No auto activity"));
+            }
         }
     }
 

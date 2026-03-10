@@ -75,6 +75,7 @@ class CategoryListCell extends ListCell<Category> {
             String colorHex = CategoryColorUtil.colorFor(item.getName());
             Circle dot = new Circle(5, Color.web(colorHex));
             Text name = new Text(controller.formatCategoryDisplay(item));
+            name.getStyleClass().add("list-cell-text");
             HBox box = new HBox(8, dot, name);
             box.setPadding(new Insets(2, 0, 2, 0));
             setGraphic(box);

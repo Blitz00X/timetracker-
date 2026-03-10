@@ -51,7 +51,7 @@ public class CompactWindow {
         restoreButton.setOnAction(event -> restoreMain());
 
         VBox root = new VBox(8, statusLabel, categoryCombo, startStopButton, timerLabel, restoreButton);
-        root.setPadding(new Insets(12));
+        root.getStyleClass().add("card");
         root.setFillWidth(true);
 
         stage = new Stage(StageStyle.UTILITY);
@@ -59,7 +59,10 @@ public class CompactWindow {
         stage.setAlwaysOnTop(true);
         stage.setResizable(false);
         stage.setTitle("TimeTracker+ Mini");
-        stage.setScene(new Scene(root, 320, 190));
+        Scene scene = new Scene(root, 320, 190);
+        String stylesheet = getClass().getResource("/com/timetracker/view/styles.css").toExternalForm();
+        scene.getStylesheets().add(stylesheet);
+        stage.setScene(scene);
         stage.setOnCloseRequest(event -> {
             event.consume();
             restoreMain();

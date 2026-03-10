@@ -8,6 +8,7 @@
 ## Project Layout
 - `src/main/java/com/timetracker/` — app code (controller, service, dao, db, tracking, util).
 - `src/main/resources/com/timetracker/view/main-view.fxml` — JavaFX UI definition.
+- `src/main/resources/com/timetracker/view/styles.css` — shared dark theme and component styles (Inter font bundled under `view/fonts/`).
 - `src/test/java/com/timetracker/` — unit tests (currently `SessionServiceTest`).
 - `timetracker.db` — SQLite DB created in project root at runtime.
 
@@ -45,6 +46,8 @@ Browser URL capture: start Chrome/Brave with `--remote-debugging-port=9222` or a
 - When adding SQL, prefer prepared statements in a DAO; keep schema changes additive and update `DatabaseInitializer`.
 - Auto-tracking is Linux-first: guard new platform-specific code behind capability checks and fail silently when unavailable.
 - The compact window (`CompactWindow`) mirrors the main controls; ensure state changes propagate through `MainController` methods.
+- Styling is centralized in `styles.css`; keep FXML free of inline styles and reuse style classes (e.g., `card`, `section-title`, `muted-text`) for consistency.
+- Auto Usage tab includes a toggle to enable/disable background tracking; when toggled off, the auto table and export controls are disabled and tracking is paused in `ActivityTrackingService`.
 
 ## Debugging
 - Enable SLF4J output by adjusting `slf4j-simple` config (default logs to stderr).
